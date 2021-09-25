@@ -9,16 +9,18 @@ import random as rand
 
 def main():
     # Initializing
-    rows = 3
-    columns = 3
+    rows = 23
+    columns = 23
     mount_matrix = np.zeros((rows, columns))
 
+    # TODO when unstable when there are two ones, force it to go to the opposite space
     # Creating mountain
     drop_ones(mount_matrix)
 
 
 def drop_ones(matrix):
     """
+    right now expects odd matrix
     stable: Defined as a group of three 1s centered below the current
     position of the falling 1.
     :param matrix:
@@ -28,7 +30,7 @@ def drop_ones(matrix):
     ground = np.shape(matrix)[0] - 1
     flag = True
 
-    # Find middle (TODO Randomize later)
+    # Find middle TODO Randomize later to pick middle position when even
     middle = math.floor(len(matrix[0]) / 2)
 
     # 1. Drop ones until a 1 is in the top row.
@@ -62,6 +64,8 @@ def check_stability(curr_pos, matrix, ground):
     """
     # Check the 3 positions for 1s
     # one_pos is the position the 1 might be placed
+    left_wall = -1
+    right_wall = np.shape(matrix)[1]
     below = curr_pos
     below_left = (curr_pos[0], curr_pos[1] - 1)
     below_right = (curr_pos[0], curr_pos[1] + 1)
@@ -87,16 +91,12 @@ def check_stability(curr_pos, matrix, ground):
         # If below is 0, one_pos falls
         if matrix[below] == 0:
             one_pos = below
+            below = (one_pos[0] + 1, one_pos[1])
+            below_left = (below[0], below[1] - 1)
+            below_right = (below[0], below[1] + 1)
 
-            # If not one ground, recalculate below, below_left, and below_right
-            if one_pos[0] != ground:
-                below = (one_pos[0] + 1, one_pos[1])
-                below_left = (one_pos[0], one_pos[1] - 1)
-                below_right = (one_pos[0], one_pos[1] + 1)
-
-        # TODO MAKE SURE BELOW AND OTHER CHECKS AREN'T OUT OF BOUNDS
-        if below:
-            pass
+        if below[0] > ground or below_left[1] <= left_wall or below_right[1] >= right_wall:
+            break
 
     # Mark position once stable
     matrix[one_pos] = 1
