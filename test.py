@@ -102,12 +102,5 @@ def check_stability(curr_pos, matrix, ground):
     matrix[one_pos] = 1
 
 
-
-
-
-
-
-
-
 if __name__ == "__main__":
     main()
