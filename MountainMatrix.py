@@ -1,5 +1,5 @@
 """
-Mountain Test
+Mountain Matrix
 """
 
 import numpy as np
@@ -9,11 +9,10 @@ import random as rand
 
 def main():
     # Initializing
-    rows = 23
-    columns = 23
+    rows = 5
+    columns = 5
     mount_matrix = np.zeros((rows, columns))
 
-    # TODO when unstable when there are two ones, force it to go to the opposite space
     # Creating mountain
     drop_ones(mount_matrix)
 
@@ -75,6 +74,14 @@ def check_stability(curr_pos, matrix, ground):
 
     # Continue falling until hit stable position or ground.
     while not(matrix[below] == 1 and matrix[below_left] == 1 and matrix[below_right] == 1) and one_pos[0] != ground:
+        # Force 1 to fall in correct direction
+        if matrix[below_right] == 0 and matrix[below_left] == 1:
+            spin = 1
+            spun = True
+        elif matrix[below_left] == 0 and matrix[below_right] == 1:
+            spin = 0
+            spun = True
+
         # Randomly decide whether to go left or right
         if not spun:
             spin = rand.randrange(0, 2)
