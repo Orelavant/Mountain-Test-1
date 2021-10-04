@@ -5,6 +5,7 @@ Mountain Matrix
 import numpy as np
 import math as math
 import random as rand
+import matplotlib.pyplot as plt
 
 
 def main():
@@ -15,6 +16,70 @@ def main():
 
     # Creating mountain
     drop_ones(mount_matrix)
+
+    # Plot circles for mountain
+    # TODO FIGURE OUT WHY GRAPHING OF CIRCLES IS INCORRECT
+    plot_mountain(mount_matrix)
+
+
+def plot_mountain(matrix):
+    # Define dimensions of the graph and of circles
+    rows = np.shape(matrix)[0]
+    columns = np.shape(matrix)[1]
+    radius = 1
+    scale = math.floor(radius // 0.5)
+    plt.figure()
+
+    # Define if rows is even or not
+    if rows % 2 == 0:
+        rows_even = True
+    else:
+        rows_even = False
+
+    # From info in matrix, draw circles
+    for curr_row in range(rows):
+        prev_coords = (-1, -1)
+        for curr_col in range(columns):
+            if matrix[curr_row][curr_col] == 1:
+                # If rows is even and the current row is even, draw circles around ones on matrix. Else draw circles between ones.
+                # If rows is odd and the current row is even, draw circles between ones on matrix. Else draw circles around ones.
+                coord_x = curr_row * scale
+                coord_y = curr_col * scale
+                if rows_even:
+                    if curr_row % 2 == 0: # If current row is even
+                        # Skip first one seen, then plot circles after that
+                        if curr_col != 0:
+                            plot_between_ones(prev_coords, coord_x, coord_y, radius)
+                        # Set to last circle seen
+                        prev_coords = (coord_x, coord_y)
+                    # If current row is odd
+                    else:
+                        plot_around_ones(coord_x, coord_y, radius)
+                else: # If the number of rows is odd
+                    if curr_row % 2 == 0:  # If current row is even
+                        # Skip first one seen, then plot circles after that
+                        if curr_col != 0:
+                            plot_between_ones(prev_coords, coord_x, coord_y, radius)
+                        # Set to last circle seen
+                        prev_coords = (coord_x, coord_y)
+                    # If current row is odd
+                    else:
+                        plot_around_ones(coord_x, coord_y, radius)
+
+    # Show plot
+    plt.show()
+
+
+def plot_between_ones(prev_coords, coord_x, coord_y, radius):
+    center_x = (prev_coords[0] + coord_x) / 2
+    center_y = (prev_coords[1] + coord_y) / 2
+    circle = plt.Circle((center_x, center_y), radius, fc='blue')
+    plt.gca().add_patch(circle)
+
+
+def plot_around_ones(coord_x, coord_y, radius):
+    circle = plt.Circle((coord_x, coord_y), radius, fc='blue')
+    plt.gca().add_patch(circle)
 
 
 def drop_ones(matrix):
@@ -35,7 +100,6 @@ def drop_ones(matrix):
     # 1. Drop ones until a 1 is in the top row.
     # curr_pos[0] is row position. curr_pos[1] is column position.
     while flag is True:
-        print(matrix)
         # Position to check for 1s
         curr_pos = (0, middle)
 
