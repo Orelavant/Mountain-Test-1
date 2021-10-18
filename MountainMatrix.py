@@ -17,6 +17,8 @@ def main():
     # Creating mountain
     drop_ones(mount_matrix)
 
+    print(mount_matrix)
+
     # Plot circles for mountain
     # TODO FIGURE OUT WHY GRAPHING OF CIRCLES IS INCORRECT
     plot_mountain(mount_matrix)
