@@ -104,21 +104,22 @@ def drop_ones(matrix):
     while flag is True:
         # Position to check for 1s
         curr_pos = (0, middle)
+        print(matrix)
 
         # Continue until either a 1 is hit or the ground is hit. If 1 is hit,
         # go to step 2. If ground is hit, stay in current position.
         while matrix[curr_pos] != 1 and curr_pos[0] != ground:
             curr_pos = (curr_pos[0] + 1, curr_pos[1])
 
+        # Check if we've hit the top row.
+        if curr_pos[0] == 0:
+            break
+
         # If hit ground and position is 0, skip stability checks. Otherwise mark current position
         if not(curr_pos[0] == ground and matrix[curr_pos] == 0):
             check_stability(curr_pos, matrix, ground)
         else:
             matrix[curr_pos] = 1
-
-        # Check if we've hit the top row.
-        if curr_pos[0] == 0:
-            flag = False
 
 
 def check_stability(curr_pos, matrix, ground):
