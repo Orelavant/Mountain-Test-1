@@ -6,22 +6,33 @@ import numpy as np
 import math as math
 import random as rand
 import matplotlib.pyplot as plt
+from matplotlib.pyplot import figure
 
 
 def main():
     # Initializing
     rows = 5
-    columns = 5
+    columns = 9
     mount_matrix = np.zeros((rows, columns))
 
     # Creating mountain
     drop_ones(mount_matrix)
 
-    print(mount_matrix)
-
     # Plot circles for mountain
-    # TODO FIGURE OUT WHY GRAPHING OF CIRCLES IS INCORRECT
     plot_mountain(mount_matrix)
+
+    # Testing graphing
+    # circle = plt.Circle((1, 1), 1, fc='blue')
+    # plt.gca().add_patch(circle)
+    # circle = plt.Circle((3, 1), 1, fc='blue')
+    # plt.gca().add_patch(circle)
+    # x_axis = 10
+    # y_range = 10
+    # plt.ylim(0, x_axis)
+    # plt.xlim(0, y_range)
+    # plt.xticks(np.arange(x_axis + 1))
+    # plt.yticks(np.arange(y_range + 1))
+    # plt.show()
 
 
 def plot_mountain(matrix):
@@ -32,43 +43,24 @@ def plot_mountain(matrix):
     scale = math.floor(radius // 0.5)
     plt.figure()
 
-    # Define if rows is even or not
-    if rows % 2 == 0:
-        rows_even = True
-    else:
-        rows_even = False
-
     # From info in matrix, draw circles
     for curr_row in range(rows):
-        prev_coords = (-1, -1)
         for curr_col in range(columns):
             if matrix[curr_row][curr_col] == 1:
-                # If rows is even and the current row is even, draw circles around ones on matrix. Else draw circles between ones.
-                # If rows is odd and the current row is even, draw circles between ones on matrix. Else draw circles around ones.
-                coord_x = curr_row * scale
-                coord_y = curr_col * scale
-                if rows_even:
-                    if curr_row % 2 == 0: # If current row is even
-                        # Skip first one seen, then plot circles after that
-                        if curr_col != 0:
-                            plot_between_ones(prev_coords, coord_x, coord_y, radius)
-                        # Set to last circle seen
-                        prev_coords = (coord_x, coord_y)
-                    # If current row is odd
-                    else:
-                        plot_around_ones(coord_x, coord_y, radius)
-                else: # If the number of rows is odd
-                    if curr_row % 2 == 0:  # If current row is even
-                        # Skip first one seen, then plot circles after that
-                        if curr_col != 0:
-                            plot_between_ones(prev_coords, coord_x, coord_y, radius)
-                        # Set to last circle seen
-                        prev_coords = (coord_x, coord_y)
-                    # If current row is odd
-                    else:
-                        plot_around_ones(coord_x, coord_y, radius)
+                # If rows is even and the current row is even, draw circles between ones on matrix. Else draw circles around ones.
+                # If rows is odd and the current row is even, draw circles around ones on matrix. Else draw circles between ones.
+                coord_x = curr_col * scale
+                coord_y = (rows - curr_row) * scale
+                plot_around_ones(coord_x, coord_y, radius)
 
-    # Show plot
+
+    # Define plot range and show plot
+    x_range = columns * scale
+    y_range = rows * scale
+    plt.ylim(-1, x_range)
+    plt.xlim(-1, y_range)
+    plt.xticks(np.arange(x_range + 1))
+    plt.yticks(np.arange(y_range + 1))
     plt.show()
 
 
