@@ -43,33 +43,24 @@ def plot_mountain(matrix):
     scale = math.floor(radius // 0.5)
     plt.figure()
 
-    # From info in matrix, draw circles
+    # From ones in matrix, draw circles
     for curr_row in range(rows):
         for curr_col in range(columns):
             if matrix[curr_row][curr_col] == 1:
-                # If rows is even and the current row is even, draw circles between ones on matrix. Else draw circles around ones.
-                # If rows is odd and the current row is even, draw circles around ones on matrix. Else draw circles between ones.
                 coord_x = curr_col * scale
                 coord_y = (rows - curr_row) * scale
                 plot_around_ones(coord_x, coord_y, radius)
 
 
     # Define plot range and show plot
-    x_range = columns * scale
+    # TODO FIX RANGES FOR GRAPHING
+    x_range = columns * scale - 1
     y_range = rows * scale
-    plt.ylim(-1, x_range)
+    plt.ylim(scale, x_range)
     plt.xlim(-1, y_range)
     plt.xticks(np.arange(x_range + 1))
     plt.yticks(np.arange(y_range + 1))
     plt.show()
-
-
-def plot_between_ones(prev_coords, coord_x, coord_y, radius):
-    center_x = (prev_coords[0] + coord_x) / 2
-    center_y = (prev_coords[1] + coord_y) / 2
-    circle = plt.Circle((center_x, center_y), radius, fc='blue')
-    plt.gca().add_patch(circle)
-
 
 def plot_around_ones(coord_x, coord_y, radius):
     circle = plt.Circle((coord_x, coord_y), radius, fc='blue')
